@@ -4,7 +4,7 @@ export const loginUser = createAsyncThunk(
   'user/login',
   async ({ username, password }, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:3006/api/login', {
+      const response = await fetch('http://localhost:3006/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -17,7 +17,16 @@ export const loginUser = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data;
+      // Store the token in localStorage
+      localStorage.setItem('token', data.token);
+      
+      // Return user data along with the token
+      return {
+        token: data.token,
+        username: data.username,
+        surname: data.surname,
+        userTypeId: data.userTypeId,
+      };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -27,9 +36,8 @@ export const loginUser = createAsyncThunk(
 const initialState = {
   username: null,
   token: null,
-  name: null,
   surname: null,
-  files: [],
+  userTypeId: null,
   loading: false,
   error: null,
 };
@@ -38,12 +46,9 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    updateUser: (state, action) => {
-      return { ...state, ...action.payload };
-    },
-    clearUser: () => initialState,
-    addFile: (state, action) => {
-      state.files.push(action.payload);
+    logout: (state) => {
+      localStorage.removeItem('token');
+      return initialState;
     },
   },
   extraReducers: (builder) => {
@@ -56,8 +61,8 @@ const userSlice = createSlice({
         state.loading = false;
         state.username = action.payload.username;
         state.token = action.payload.token;
-        state.name = action.payload.name;
         state.surname = action.payload.surname;
+        state.userTypeId = action.payload.userTypeId; // Store userTypeId
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -66,6 +71,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { updateUser, clearUser, addFile } = userSlice.actions;
+export const { logout } = userSlice.actions;
 
 export default userSlice.reducer;

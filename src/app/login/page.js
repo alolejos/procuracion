@@ -24,9 +24,17 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const resultAction = await dispatch(loginUser(formData));
-    if (loginUser.fulfilled.match(resultAction)) {
-      router.push('/'); // Redirect to home page after successful login
+    try {
+      const resultAction = await dispatch(loginUser(formData));
+      if (loginUser.fulfilled.match(resultAction)) {
+        // Login successful
+        router.push('/'); // Redirect to home page after successful login
+      } else if (loginUser.rejected.match(resultAction)) {
+        // Login failed
+        console.error('Login failed:', resultAction.payload);
+      }
+    } catch (err) {
+      console.error('Login error:', err);
     }
   };
 
@@ -37,7 +45,7 @@ export default function Login() {
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="username" className="block mb-1">Email</label>
+            <label htmlFor="username" className="block mb-1">Correo</label>
             <input
               type="email"
               id="username"

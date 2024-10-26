@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -7,8 +8,10 @@ export default function Register() {
     password: '',
     name: '',
     surname: '',
-    userType: 'MesaDeEntradas', // Default user type
+    userType: '1', // Default user type
   });
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,82 +21,108 @@ export default function Register() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Registering user:', formData);
-    // Implement registration logic here, e.g., send data to backend
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:3006/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Registration failed');
+      }
+
+      const data = await response.json();
+      console.log('User registered successfully:', data);
+      
+      // Redirect to login page after successful registration
+      router.push('/login');
+    } catch (error) {
+      console.error('Registration error:', error);
+      setError(error.message || 'An error occurred during registration');
+    }
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Register</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="username" className="block mb-1">Email</label>
-          <input
-            type="email"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password" className="block mb-1">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="name" className="block mb-1">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="surname" className="block mb-1">Surname</label>
-          <input
-            type="text"
-            id="surname"
-            name="surname"
-            value={formData.surname}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="userType" className="block mb-1">User Type</label>
-          <select
-            id="userType"
-            name="userType"
-            value={formData.userType}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          >
-            <option value="MesaDeEntradas">Mesa de Entradas</option>
-            <option value="Direccion1">Dirección 1</option>
-            <option value="Direccion2">Dirección 2</option>
-          </select>
-        </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-          Register
-        </button>
-      </form>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="bg-white border border-black shadow-lg rounded-lg w-1/2 p-8">
+        <h1 className="text-3xl font-bold mb-4 text-center">Registro</h1>
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="username" className="block mb-1">Email</label>
+            <input
+              type="email"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block mb-1">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="name" className="block mb-1">Nombre</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="surname" className="block mb-1">Apellido</label>
+            <input
+              type="text"
+              id="surname"
+              name="surname"
+              value={formData.surname}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="userTypeId" className="block mb-1">Tipo de Usuario</label>
+            <select
+              id="userTypeId"
+              name="userTypeId"
+              value={formData.userTypeId}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            >
+              <option value="1">Mesa de Entradas</option>
+              <option value="2">Dirección 1</option>
+              <option value="3">Dirección 2</option>
+            </select>
+          </div>
+          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full">
+            Register
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
