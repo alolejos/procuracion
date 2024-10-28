@@ -1,25 +1,16 @@
 'use client';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../store/userSlice'; // Asegúrate de importar la acción de logout
 
 const Menu = () => {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    // Simulate fetching user data
-    const simulatedUserData = {
-      name: 'Juan Pérez', // Replace with actual user data
-    };
-
-    // Simulate user being logged in
-    setUser(simulatedUserData);
-  }, []);
+  const user = useSelector((state) => state.user); // Leer el estado del usuario desde el store
+  const dispatch = useDispatch(); // Obtener la función dispatch
 
   const handleLogout = () => {
-    // Simulate logout functionality
     console.log('User logged out');
-    setUser(null); // Clear user data on logout
-    // Implement actual logout logic here, such as clearing tokens
+    dispatch(logout()); // Despachar la acción de logout
   };
 
   return (
@@ -31,9 +22,9 @@ const Menu = () => {
         <li><Link href="/perfil" className="hover:text-gray-300">Perfil</Link></li>
       </ul>
       <div className="flex items-center space-x-4">
-        {user ? (
+        {user.token ? ( // Verificar si hay un token en el store
           <>
-            <span>{user.name}</span>
+            <span>Bienvenido {user.name} {user.surname}</span> {/* Mostrar el nombre de usuario */}
             <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
               Logout
             </button>

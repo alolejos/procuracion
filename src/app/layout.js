@@ -9,7 +9,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es">
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+        <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
           <body
             className={`antialiased min-h-screen font-[family-name:var(--font-geist-sans)]`}
           >

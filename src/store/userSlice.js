@@ -19,13 +19,14 @@ export const loginUser = createAsyncThunk(
       const data = await response.json();
       // Store the token in localStorage
       localStorage.setItem('token', data.token);
-      
+      console.log('termina el loginuser:', data);
       // Return user data along with the token
       return {
         token: data.token,
-        username: data.username,
-        surname: data.surname,
-        userTypeId: data.userTypeId,
+        username: data.user.username,
+        name: data.user.name,
+        surname: data.user.surname,
+        userTypeId: data.user.userTypeId,
       };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -36,6 +37,7 @@ export const loginUser = createAsyncThunk(
 const initialState = {
   username: null,
   token: null,
+  name: null,
   surname: null,
   userTypeId: null,
   loading: false,
@@ -50,6 +52,10 @@ const userSlice = createSlice({
       localStorage.removeItem('token');
       return initialState;
     },
+    clearUser: (state) => {
+      localStorage.removeItem('token'); // Clear token from localStorage
+      return initialState; // Reset state to initial
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -58,10 +64,12 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        console.log('ENTRO AL FULFILLED: Login successful:', action.payload); 
         state.loading = false;
         state.username = action.payload.username;
         state.token = action.payload.token;
         state.surname = action.payload.surname;
+        state.name = action.payload.name;
         state.userTypeId = action.payload.userTypeId; // Store userTypeId
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -71,6 +79,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, clearUser } = userSlice.actions;
 
 export default userSlice.reducer;

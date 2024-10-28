@@ -8,7 +8,7 @@ export default function Register() {
     password: '',
     name: '',
     surname: '',
-    userType: '1', // Default user type
+    userTypeId: '1', // Default user type
   });
   const [error, setError] = useState('');
   const router = useRouter();

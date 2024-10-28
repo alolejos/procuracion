@@ -1,12 +1,13 @@
 'use client';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addFile } from '../../store/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
 export default function MesaDeEntradas() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.token);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -20,27 +21,54 @@ export default function MesaDeEntradas() {
 
     setLoading(true);
 
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    formData.append('fileName', selectedFile.name);
-
     try {
-      const response = await fetch('http://localhost:3006/api/upload', {
-        method: 'POST',
-        body: formData,
+
+      // PRIMERO VAMOS A GENERAR UN NOMBRE UNICO PARA EL ARCHIVO MEDIANTE UN HASH
+      const uniqueFileName = `${Date.now()}-${selectedFile.name}`;
+      // Para mejor comprension definimos en variables: el nombre único del archivo, el nombre del archivo y el tipo de archivo
+      const fileName = uniqueFileName;
+      const realFileName = selectedFile.name;
+      const fileType = selectedFile.type;
+
+      // Solicitar la URL prefirmada
+      const response = await axios.post('http://15.228.73.54:3001/api/files/generate-presigned-url', {
+        fileName: fileName,
+        fileType: fileType,
+      }, {
+        headers: {
+          Authorization: `${token}`,
+        },
       });
 
-      if (response.ok) {
-        console.log('File uploaded successfully');
-        alert('File uploaded successfully');
-        dispatch(addFile(selectedFile.name));
-      } else {
-        console.error('File upload failed');
-        alert('File upload failed');
-      }
+      const { url } = response.data; // Obtener la URL prefirmada
+
+      // Subir el archivo a S3 usando la URL prefirmada
+      const uploadResponse = await axios.put(url, selectedFile, {
+        headers: {
+          'Content-Type': selectedFile.type,
+        },
+      });
+
+      console.log('File uploaded successfully:', uploadResponse);
+      alert('File uploaded successfully');
+
+      // Enviamos al endpoint de la API para que se guarde en la base de datos los datos del archivo
+      const response1 = await axios.post('http://15.228.73.54:3001/api/files/save-file-data', {
+        fileName: fileName,
+        realFileName: realFileName,
+        fileType: fileType,
+      }, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+
+      console.log('RESPONSE DEL SAVE FILE DATA:', response1);
+
+      alert('File data saved successfully');
     } catch (error) {
-      console.error('Error uploading file:', error);
-      alert('Error uploading file');
+      console.error('Error:', error);
+      alert('Error uploading file: ' + (error.response ? error.response.data : error.message));
     } finally {
       setLoading(false);
     }
