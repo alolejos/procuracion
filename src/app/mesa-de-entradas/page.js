@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { clearUser, updateAlerts } from '@/store/userSlice';
 import Image from 'next/image';
-import html2pdf from 'html2pdf.js';
 
 export default function MesaDeEntradas() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -51,7 +50,7 @@ export default function MesaDeEntradas() {
       const fileType = selectedFile.type;
 
       // Solicitar la URL prefirmada
-      const response = await axios.post('http://localhost:3001/api/files/generate-presigned-url', {
+      const response = await axios.post('http://localhost:3006/api/files/generate-presigned-url', {
         fileName: fileName,
         fileType: fileType,
       }, {
@@ -70,7 +69,7 @@ export default function MesaDeEntradas() {
       });
 
       // Enviamos al endpoint de la API para que se guarde en la base de datos los datos del archivo
-      const response1 = await axios.post('http://localhost:3001/api/files/save-file-data', {
+      const response1 = await axios.post('http://localhost:3006/api/files/save-file-data', {
         fileName: fileName,
         realFileName: realFileName,
         fileType: fileType,
@@ -114,7 +113,7 @@ export default function MesaDeEntradas() {
       
       // GUARDAMOS EL REPORTE EN LA BASE DE DATOS
       const reportResponse = await axios.post(
-        'http://localhost:3001/api/reports/create',
+        'http://localhost:3006/api/reports/create',
         {
           fileData: data,
           fileId: fileId
@@ -129,7 +128,7 @@ export default function MesaDeEntradas() {
 
       // ACTUALIZAMOS EL ESTADO DEL ARCHIVO EN LA BASE DE DATOS
       const updateFile = await axios.put(
-        `http://localhost:3001/api/files/update/${fileId}`,
+        `http://localhost:3006/api/files/update/${fileId}`,
         {
           mlData: data,
           status: 'PROCESSED' // O cualquier otro estado que necesites
@@ -158,7 +157,7 @@ export default function MesaDeEntradas() {
       // fileId = fileId
       // userId = user.id
       const alertResponse = await axios.post(
-        'http://localhost:3001/api/alerts/',
+        'http://localhost:3006/api/alerts/',
         {
           resumen: data[data.tipo].Resumen,
           sectorId: updateFile.data.newExpediente ? 1 : updateFile.data.expediente.sectorId,
@@ -196,14 +195,17 @@ export default function MesaDeEntradas() {
     }
   };
 
-  const generatePDF = () => {
+  
+  const generatePDF = async (reporte) => {
+    const html2pdf = (await import('html2pdf.js')).default;
+
     const element = informeRef.current;
     const opt = {
       margin: 1,
       filename: 'informe-automatizado.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
 
     html2pdf().set(opt).from(element).save();

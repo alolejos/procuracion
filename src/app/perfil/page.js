@@ -29,7 +29,7 @@ export default function Perfil() {
     const fetchData = async () => {
       try {
         // Cargar tipos de usuario
-        const typesResponse = await axios.get('http://localhost:3001/api/user-types', {
+        const typesResponse = await axios.get('http://localhost:3006/api/user-types', {
           headers: { Authorization: `${token}` }
         });
         setUserTypes(typesResponse.data);
@@ -37,7 +37,7 @@ export default function Perfil() {
         console.log("USER TYPES devueltos: ", typesResponse.data);
 
         // Cargar datos del usuario
-        const userResponse = await axios.get('http://localhost:3001/api/users/profile', {
+        const userResponse = await axios.get('http://localhost:3006/api/users/profile', {
           headers: { Authorization: `${token}` }
         });
 
@@ -87,7 +87,7 @@ export default function Perfil() {
       if (formData.userTypeId !== currentUser.userTypeId) updateData.userTypeId = formData.userTypeId;
 
       const response = await axios.put(
-        'http://localhost:3001/api/users/profile',
+        'http://localhost:3006/api/users/profile',
         updateData,
         {
           headers: { Authorization: `${token}` }

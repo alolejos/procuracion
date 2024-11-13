@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearUser } from '@/store/userSlice';
-import html2pdf from 'html2pdf.js';
 import Image from 'next/image';
 
 // Componente para el informe
@@ -118,7 +117,7 @@ export default function Reportes() {
   useEffect(() => {
     const fetchReportes = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/reports', {
+        const response = await axios.get('http://localhost:3006/api/reports', {
           headers: {
             Authorization: `${token}`
           }
@@ -143,7 +142,9 @@ export default function Reportes() {
     fetchReportes();
   }, []);
 
-  const generatePDF = (reporte) => {
+  const generatePDF = async (reporte) => {
+    const html2pdf = (await import('html2pdf.js')).default;
+    
     const element = informeRefs.current[reporte.id];
     
     const opt = {
