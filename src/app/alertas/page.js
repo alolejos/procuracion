@@ -18,7 +18,7 @@ export default function Reportes() {
   useEffect(() => {
     const fetchAlertas = async () => {
       try {
-        const response = await axios.get(`http://localhost:3006/api/alerts/sector/${sectorId}`, {
+        const response = await axios.get(`http://localhost:3001/api/alerts/sector/${sectorId}`, {
           headers: {
             Authorization: `${token}`
           }
@@ -55,7 +55,7 @@ export default function Reportes() {
   const handleDownload = async (alertaId) => {
     try {
       await axios.put(
-        `http://localhost:3006/api/alerts/sector/${sectorId}`,
+        `http://localhost:3001/api/alerts/sector/${sectorId}`,
         { estado: 'LEIDO' },
         {
           headers: {
@@ -77,7 +77,7 @@ export default function Reportes() {
     if (alertaId) {
       try {
         await axios.put(
-          `http://localhost:3006/api/alerts/${alertaId}`,
+          `http://localhost:3001/api/alerts/${alertaId}`,
           { estado: 'LEIDO' },
           {
             headers: {
@@ -152,7 +152,7 @@ export default function Reportes() {
                     <button
                       onClick={() => {
                         handleDownload(alerta.id);
-                        window.open(`http://localhost:3006/api/files/${alerta.fileId}/download`, '_blank');
+                        window.open(`http://localhost:3001/api/files/${alerta.fileId}/download`, '_blank');
                       }}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
