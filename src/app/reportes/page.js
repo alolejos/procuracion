@@ -117,7 +117,7 @@ export default function Reportes() {
   useEffect(() => {
     const fetchReportes = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/reports', {
+        const response = await axios.get('http://15.228.73.54:3001/api/reports', {
           headers: {
             Authorization: `${token}`
           }
