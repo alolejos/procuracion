@@ -41,7 +41,7 @@ export default function Login() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white border border-black shadow-lg rounded-lg w-1/2 h-1/2 flex flex-col justify-center p-8">
-        <h1 className="text-3xl font-bold mb-4 text-center">Login</h1>
+        <h1 className="text-3xl font-bold mb-4 text-center">Ingreso</h1>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -73,13 +73,13 @@ export default function Login() {
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Ingresando...' : 'Ingresar'}
           </button>
         </form>
         <div className="mt-4 text-center">
-          <p>If you are not registered, please click</p>
+          <p>Si no está registrado, ingrese aquí</p>
           <Link href="/register" className="text-blue-500 hover:underline">
-            Register
+            Registrarse
           </Link>
         </div>
       </div>

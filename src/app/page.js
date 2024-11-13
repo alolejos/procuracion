@@ -28,14 +28,21 @@ export default function Home() {
   return (
     <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
       <main className="p-8">
-        <h1 className="text-4xl font-bold mb-8 text-center">Procuración</h1>
-        
-        {user.name && <p>Welcome, {user.name} {user.surname}!</p>}
-        
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <h1 className="text-4xl font-bold mb-8 text-center">Procuración General de la CABA</h1> 
+        <br/>  
+        <br/> 
+        <br/>     
+        <br/> 
+             
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-12">
           <Link href="/mesa-de-entradas">
             <button className="bg-white text-black border border-gray-300 p-4 rounded-[50px] shadow-md hover:bg-gray-100 transition w-full h-20">
               Mesa de Entradas
+            </button>
+          </Link>
+          <Link href="/expedientes">
+            <button className="bg-white text-black border border-gray-300 p-4 rounded-[50px] shadow-md hover:bg-gray-100 transition w-full h-20">
+              Repositorio Automático de Expedientes
             </button>
           </Link>
           <button className="bg-white text-black border border-gray-300 p-4 rounded-[50px] shadow-md hover:bg-gray-100 transition w-full h-20">
@@ -50,14 +57,8 @@ export default function Home() {
           <button className="bg-white text-black border border-gray-300 p-4 rounded-[50px] shadow-md hover:bg-gray-100 transition w-full h-20">
             Repositorio de Expedientes
           </button>
-          <button className="bg-white text-black border border-gray-300 p-4 rounded-[50px] shadow-md hover:bg-gray-100 transition w-full h-20">
-            Expedientes
-          </button>
         </div>
         
-        <button onClick={handleLogout} className="mt-4 bg-red-500 text-white p-2 rounded">
-          Logout
-        </button>
       </main>
 
       <footer className="mt-8 text-center text-gray-500 p-4">

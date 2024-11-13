@@ -4,7 +4,7 @@ export const loginUser = createAsyncThunk(
   'user/login',
   async ({ username, password }, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://15.228.73.54:3001/api/auth/login', {
+      const response = await fetch('http://localhost:3001/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,11 +22,13 @@ export const loginUser = createAsyncThunk(
       console.log('termina el loginuser:', data);
       // Return user data along with the token
       return {
+        id: data.user.id,
         token: data.token,
         username: data.user.username,
         name: data.user.name,
         surname: data.user.surname,
-        userTypeId: data.user.userTypeId,
+        sectorId: data.user.sectorId,
+        alerts: data.user.alerts
       };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -35,13 +37,15 @@ export const loginUser = createAsyncThunk(
 );
 
 const initialState = {
+  id: null,
   username: null,
   token: null,
   name: null,
   surname: null,
-  userTypeId: null,
+  sectorId: null,
   loading: false,
   error: null,
+  alerts: 0
 };
 
 const userSlice = createSlice({
@@ -55,6 +59,15 @@ const userSlice = createSlice({
     clearUser: (state) => {
       localStorage.removeItem('token'); // Clear token from localStorage
       return initialState; // Reset state to initial
+    },
+    updateUser: (state, action) => {
+      state.name = action.payload.name;
+      state.surname = action.payload.surname;
+      state.sectorId = action.payload.sectorId;
+      state.id = action.payload.id;
+    },
+    updateAlerts: (state, action) => {
+      state.alerts = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -70,7 +83,9 @@ const userSlice = createSlice({
         state.token = action.payload.token;
         state.surname = action.payload.surname;
         state.name = action.payload.name;
-        state.userTypeId = action.payload.userTypeId; // Store userTypeId
+        state.sectorId = action.payload.sectorId; // Store userTypeId
+        state.id = action.payload.id,
+        state.alerts = action.payload.alerts
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -79,6 +94,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout, clearUser } = userSlice.actions;
+export const { logout, clearUser, updateUser, updateAlerts } = userSlice.actions;
 
 export default userSlice.reducer;

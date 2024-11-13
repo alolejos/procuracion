@@ -8,25 +8,25 @@ import Menu from '../components/Menu';
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <Provider store={store}>
-        <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
           <body
             className={`antialiased min-h-screen font-[family-name:var(--font-geist-sans)]`}
           >
-            <Menu />
-            
-            <main className="p-8">
-            {children}
+            <Provider store={store}>
+            <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
+              <Menu />
               
-            </main>
+              <main className="p-8">
+              {children}
+                
+              </main>
 
-            <footer className="mt-8 text-center text-gray-500 p-4">
-              <p>&copy; 2023 Sistema de Procuración. Todos los derechos reservados.</p>
-            </footer>
+              <footer className="mt-8 text-center text-gray-500 p-4">
+                <p>&copy; 2023 Sistema de Procuración. Todos los derechos reservados.</p>
+              </footer>
 
+            </PersistGate>
+            </Provider>
           </body>
-        </PersistGate>
-      </Provider>
     </html>
   );
 }

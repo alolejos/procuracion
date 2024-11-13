@@ -8,7 +8,7 @@ export default function Register() {
     password: '',
     name: '',
     surname: '',
-    userTypeId: '1', // Default user type
+    sectorId: '1', // Default user type
   });
   const [error, setError] = useState('');
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function Register() {
     setError('');
 
     try {
-      const response = await fetch('http://15.228.73.54:3001/api/auth/register', {
+      const response = await fetch('http://localhost:3001/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export default function Register() {
 
       const data = await response.json();
       console.log('User registered successfully:', data);
-      
+      alert('Usuario registrado correctamente');
       // Redirect to login page after successful registration
       router.push('/login');
     } catch (error) {
@@ -105,11 +105,11 @@ export default function Register() {
             />
           </div>
           <div>
-            <label htmlFor="userTypeId" className="block mb-1">Tipo de Usuario</label>
+            <label htmlFor="sectorId" className="block mb-1">Sector</label>
             <select
-              id="userTypeId"
-              name="userTypeId"
-              value={formData.userTypeId}
+              id="sectorId"
+              name="sectorId"
+              value={formData.sectorId}
               onChange={handleChange}
               className="w-full p-2 border rounded"
             >
@@ -119,7 +119,7 @@ export default function Register() {
             </select>
           </div>
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full">
-            Register
+            Registrarse
           </button>
         </form>
       </div>
