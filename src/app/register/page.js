@@ -26,7 +26,7 @@ export default function Register() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/auth/register', {
+      const response = await fetch('http://18.228.3.214:3001/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

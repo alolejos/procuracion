@@ -17,7 +17,7 @@ export default function ExpedienteDetalle() {
   useEffect(() => {
     const fetchExpedienteData = async () => {
       try {
-        const expResponse = await axios.get(`http://localhost:3001/api/expedientes/${params.id}`, {
+        const expResponse = await axios.get(`http://18.228.3.214:3001/api/expedientes/${params.id}`, {
           headers: { 
             Authorization: `${token}` 
         }
