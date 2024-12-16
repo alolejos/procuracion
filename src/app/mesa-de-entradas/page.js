@@ -50,7 +50,7 @@ export default function MesaDeEntradas() {
       const fileType = selectedFile.type;
 
       // Solicitar la URL prefirmada
-      const response = await axios.post('http://18.228.3.214:3001/api/files/generate-presigned-url', {
+      const response = await axios.post('http://localhost:3001/api/files/generate-presigned-url', {
         fileName: fileName,
         fileType: fileType,
       }, {
@@ -69,7 +69,7 @@ export default function MesaDeEntradas() {
       });
 
       // Enviamos al endpoint de la API para que se guarde en la base de datos los datos del archivo
-      const response1 = await axios.post('http://18.228.3.214:3001/api/files/save-file-data', {
+      const response1 = await axios.post('http://localhost:3001/api/files/save-file-data', {
         fileName: fileName,
         realFileName: realFileName,
         fileType: fileType,
@@ -83,14 +83,14 @@ export default function MesaDeEntradas() {
 
       showDialog('Datos del archivo guardados correctamente. Procesando...', 'info');
 
-//      const responseML = await axios.post('http://18.228.3.214:5000/detect_file', {
+//      const responseML = await axios.post('http://localhost:5000/detect_file', {
 //        fileName: fileName,
 //        realFileName: realFileName,
 //        fileType: fileType,
 //      });
 
       // ENVIAMOS EL ARCHIVO AL SERVIDOR DE ML
-      const responseML = await fetch('http://18.228.3.214:5000/detect_file', {
+      const responseML = await fetch('http://localhost:5000/detect_file', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -113,7 +113,7 @@ export default function MesaDeEntradas() {
       
       // GUARDAMOS EL REPORTE EN LA BASE DE DATOS
       const reportResponse = await axios.post(
-        'http://18.228.3.214:3001/api/reports/create',
+        'http://localhost:3001/api/reports/create',
         {
           fileData: data,
           fileId: fileId
@@ -128,7 +128,7 @@ export default function MesaDeEntradas() {
 
       // ACTUALIZAMOS EL ESTADO DEL ARCHIVO EN LA BASE DE DATOS
       const updateFile = await axios.put(
-        `http://18.228.3.214:3001/api/files/update/${fileId}`,
+        `http://localhost:3001/api/files/update/${fileId}`,
         {
           mlData: data,
           status: 'PROCESSED' // O cualquier otro estado que necesites
@@ -157,7 +157,7 @@ export default function MesaDeEntradas() {
       // fileId = fileId
       // userId = user.id
       const alertResponse = await axios.post(
-        'http://18.228.3.214:3001/api/alerts/',
+        'http://localhost:3001/api/alerts/',
         {
           resumen: data[data.tipo].Resumen,
           sectorId: updateFile.data.newExpediente ? 1 : updateFile.data.expediente.sectorId,

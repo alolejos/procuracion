@@ -16,7 +16,7 @@ export default function VerReporte({ params }) {
   useEffect(() => {
     const fetchReporte = async () => {
       try {
-        const response = await axios.get(`http://18.228.3.214:3001/api/reports/${params.id}`, {
+        const response = await axios.get(`http://localhost:3001/api/reports/${params.id}`, {
           headers: {
             Authorization: `${token}`
           }
