@@ -338,7 +338,7 @@ export default function MesaDeEntradas() {
 
                 <div>
                   <span className="font-semibold">Rol del GCBA: </span>
-                  <span>{mlData?.rolGCBA || 'actor/demandado'}</span>
+                  <span>{mlData?.rolGcba || 'actor/demandado'}</span>
                 </div>
 
                 <div>
