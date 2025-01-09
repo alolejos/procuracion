@@ -152,7 +152,7 @@ export default function VerReporte({ params }) {
 
             <div>
               <span className="font-semibold">Rol del GCBA: </span>
-              <span>{reporte.rolGCBA || 'actor/demandado'}</span>
+              <span>{reporte.Rol_GCBA || 'actor/demandado'}</span>
             </div>
 
             <div>
