@@ -18,7 +18,7 @@ export default function Reportes() {
   useEffect(() => {
     const fetchAlertas = async () => {
       try {
-        const response = await axios.get(`http://18.228.3.214:3001/api/alerts/sector/${sectorId}`, {
+        const response = await axios.get(`http://15.229.87.106:3001/api/alerts/sector/${sectorId}`, {
           headers: {
             Authorization: `${token}`
           }
@@ -55,7 +55,7 @@ export default function Reportes() {
   const handleDownload = async (alertaId) => {
     try {
       await axios.put(
-        `http://18.228.3.214:3001/api/alerts/sector/${sectorId}`,
+        `http://15.229.87.106:3001/api/alerts/sector/${sectorId}`,
         { estado: 'LEIDO' },
         {
           headers: {
@@ -77,7 +77,7 @@ export default function Reportes() {
     if (alertaId) {
       try {
         await axios.put(
-          `http://18.228.3.214:3001/api/alerts/${alertaId}`,
+          `http://15.229.87.106:3001/api/alerts/${alertaId}`,
           { estado: 'LEIDO' },
           {
             headers: {
@@ -152,7 +152,7 @@ export default function Reportes() {
                     <button
                       onClick={() => {
                         handleDownload(alerta.id);
-                        window.open(`http://18.228.3.214:3001/api/files/${alerta.fileId}/download`, '_blank');
+                        window.open(`http://15.229.87.106:3001/api/files/${alerta.fileId}/download`, '_blank');
                       }}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
