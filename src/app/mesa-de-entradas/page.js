@@ -142,6 +142,7 @@ export default function MesaDeEntradas() {
       );
 
       setMlData(data); // Guardar los datos en el estado
+      console.log('RESPONSE DE DATA: mlDATA', data);
       console.log('RESPONSE DE UPDATEFILE', updateFile);
 
       // CUANDO RECIBIMOS EL RESPONSE en updateFile, analizamos la respuesta. 
